@@ -3,19 +3,20 @@ import cors from 'cors';
 import { initializeBoard, move as gameMove } from './game.js';
 
 const app = express();
-const port = 5001;
-const gameStateStore = {}; // Store game states per user
 
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}));
+const PORT = process.env.PORT || 5001;
+
+const gameStateStore = {}; 
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
-// Start game
 app.post('/api/game/start', (req, res) => {
   try {
     const { size, userId } = req.body;
@@ -42,7 +43,8 @@ app.post('/api/game/start', (req, res) => {
 app.post('/api/game/move', (req, res) => {
   try {
     const { userId, direction } = req.body;
-    if (!userId || !gameStateStore[userId]) return res.status(400).json({ error: 'Invalid userId' });
+    if (!userId || !gameStateStore[userId])
+      return res.status(400).json({ error: 'Invalid userId' });
 
     const state = gameStateStore[userId];
     const result = gameMove(state.board, direction);
@@ -69,7 +71,13 @@ app.post('/api/game/restart', (req, res) => {
     if (!userId) return res.status(400).json({ error: 'Invalid userId' });
 
     const board = initializeBoard(Number(size) || 4);
-    gameStateStore[userId] = { board, score: 0, gameOver: false, won: false, size: Number(size) || 4 };
+    gameStateStore[userId] = {
+      board,
+      score: 0,
+      gameOver: false,
+      won: false,
+      size: Number(size) || 4,
+    };
 
     res.json(gameStateStore[userId]);
   } catch (err) {
@@ -78,4 +86,4 @@ app.post('/api/game/restart', (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
