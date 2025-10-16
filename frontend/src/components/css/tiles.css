@@ -1,0 +1,55 @@
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: bold;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  font-family: 'Arial', sans-serif;
+}
+
+.tile.t0 {
+  background: rgba(255,255,255,0.15);
+  color: transparent;
+  cursor: default;
+}
+
+/* While dragging, show grabbing cursor */
+.board.dragging .tile {
+  cursor: grabbing;
+}
+
+.tile.t1  { background: #eee4da; color: #776e65; }
+.tile.t2  { background: #ede0c8; color: #776e65; }
+.tile.t3  { background: #f2b179; color: #f9f6f2; }
+.tile.t4  { background: #f59563; color: #f9f6f2; }
+.tile.t5  { background: #f67c5f; color: #f9f6f2; }
+.tile.t6  { background: #f65e3b; color: #f9f6f2; }
+.tile.t7  { background: #edcf72; color: #f9f6f2; }
+.tile.t8  { background: #edcc61; color: #f9f6f2; }
+.tile.t9  { background: #edc850; color: #f9f6f2; }
+.tile.t10 { background: #edc53f; color: #f9f6f2; }
+.tile.t11 { background: #edc22e; color: #f9f6f2; }
+
+/* Tile Animations */
+.tile.hovered {
+  transform: scale(1.08);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.tile.changed {
+  animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive font for bigger boards */
+.tile[data-value]:not([data-value=""]) {
+  font-size: clamp(1rem, 2vw, 2rem);
+}

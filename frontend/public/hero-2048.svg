@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="800" y2="300" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6d365"/>
+      <stop offset="0.35" stop-color="#fda085"/>
+      <stop offset="0.7" stop-color="#a18cd1"/>
+      <stop offset="1" stop-color="#fbc2eb"/>
+    </linearGradient>
+    <linearGradient id="tile1" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#43e97b"/>
+      <stop offset="1" stop-color="#38f9d7"/>
+    </linearGradient>
+    <linearGradient id="tile2" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#667eea"/>
+      <stop offset="1" stop-color="#764ba2"/>
+    </linearGradient>
+    <linearGradient id="tile3" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f6d365"/>
+      <stop offset="1" stop-color="#fda085"/>
+    </linearGradient>
+    <linearGradient id="tile4" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#edc22e"/>
+      <stop offset="1" stop-color="#edc950"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="300" rx="24" fill="url(#bgGrad)"/>
+  <g opacity="0.18">
+    <circle cx="650" cy="40" r="90" fill="white"/>
+    <circle cx="140" cy="260" r="120" fill="white"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="110" y="70" width="90" height="90" rx="12" fill="url(#tile1)"/>
+    <rect x="210" y="70" width="90" height="90" rx="12" fill="url(#tile2)"/>
+    <rect x="310" y="70" width="90" height="90" rx="12" fill="url(#tile3)"/>
+    <rect x="410" y="70" width="90" height="90" rx="12" fill="url(#tile4)"/>
+  </g>
+  <g font-family="Poppins, Arial, sans-serif" font-weight="800" fill="white">
+    <text x="155" y="130" font-size="32" text-anchor="middle">2</text>
+    <text x="255" y="130" font-size="32" text-anchor="middle">0</text>
+    <text x="355" y="130" font-size="32" text-anchor="middle">4</text>
+    <text x="455" y="130" font-size="32" text-anchor="middle">8</text>
+  </g>
+  <text x="520" y="125" font-family="Poppins, Arial, sans-serif" font-size="52" font-weight="900" fill="#fff" opacity="0.95">2048</text>
+  <defs>
+    <filter id="shadow" x="0" y="0" width="800" height="300" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,0.25)"/>
+    </filter>
+  </defs>
+</svg>

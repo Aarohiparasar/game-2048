@@ -1,0 +1,83 @@
+/* board.css */
+
+/* Board container */
+.board {
+  display: grid;
+  background: #bbada0; /* 2048 board background */
+  padding: 8px;
+  border-radius: 12px;
+  width: min(var(--board-size, 90vmin), 90vmin, 600px);
+  aspect-ratio: 1 / 1; /* Keep square */
+  margin: 0 auto;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Dragging state */
+.board.dragging {
+  cursor: grab;
+}
+
+/* Hovered tile effect */
+.tile.hovered {
+  transform: scale(1.1);
+  z-index: 2;
+  transition: transform 0.15s ease;
+}
+
+/* Tile highlight line when dragging */
+.highlight-line {
+  background: rgba(255, 255, 255, 0.15);
+  transition: background 0.2s ease;
+}
+
+/* Tile just changed (after merge or move) */
+.changed {
+  animation: pop 0.2s ease forwards;
+}
+
+/* Pop animation for merged tiles */
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Tile styling handled inside Tile.jsx, but you can also add defaults here */
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  user-select: none;
+  color: #776e65;
+}
+
+/* Make tiles smaller for bigger boards */
+.tile[data-size] {
+  font-size: calc(32px - ((attr(data-size number) - 4) * 2px));
+}
+
+/* Optional: make board responsive */
+@media (max-width: 480px) {
+  .board {
+    max-width: 90vw;
+    padding: 6px;
+  }
+
+  .tile {
+    font-size: calc(24px - ((attr(data-size number) - 4) * 1.5px));
+  }
+}
