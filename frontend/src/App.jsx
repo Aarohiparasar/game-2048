@@ -24,6 +24,8 @@ export default function App() {
   const [hint, setHint] = useState("Use Arrow keys or WASD. Drag a tile to move.");
   const [showHelp, setShowHelp] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
+  const [scoreDeltaFlash, setScoreDeltaFlash] = useState(0);
+  const audioCtxRef = useRef(null);
 
   const clearHintLater = useCallback((ms = 700) => {
     const id = setTimeout(() => setHint("Use Arrow keys or WASD. Drag a tile to move."), ms);
@@ -57,6 +59,7 @@ export default function App() {
       setLoading(true);
       try {
         const prev = board;
+        const prevScore = score;
         const state = await moveApi(userId, direction);
         setBoard(state.board);
         setScore(state.score);
@@ -78,11 +81,78 @@ export default function App() {
         } else {
           setChangedSet(new Set());
         }
+
+        // Score delta and effects
+        const delta = (state.score ?? 0) - (prevScore ?? 0);
+        if (delta > 0) {
+          setScoreDeltaFlash(delta);
+          // auto-clear popup
+          setTimeout(() => setScoreDeltaFlash(0), 900);
+          // play a short beep using Web Audio
+          try {
+            if (!audioCtxRef.current) {
+              const Ctx = window.AudioContext || window.webkitAudioContext;
+              if (Ctx) audioCtxRef.current = new Ctx();
+            }
+            const ctx = audioCtxRef.current;
+            if (ctx && ctx.state === 'suspended') {
+              // resume on user gesture driven callback
+              ctx.resume().catch(() => {});
+            }
+            if (ctx) {
+              const o = ctx.createOscillator();
+              const g = ctx.createGain();
+              o.type = 'sine';
+              // frequency based a bit on delta (clamped)
+              const freq = Math.min(1200, 300 + delta * 5);
+              o.frequency.value = freq;
+              g.gain.value = 0.2; // louder
+              o.connect(g);
+              g.connect(ctx.destination);
+              o.start();
+              // quick envelope
+              const now = ctx.currentTime;
+              g.gain.setValueAtTime(0.2, now);
+              g.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+              o.stop(now + 0.3);
+            }
+          } catch (_) {
+            // ignore audio errors silently
+          }
+        } else if (state.moved) {
+          // Tiles moved but no merge (no score change): play a softer, lower tick
+          try {
+            if (!audioCtxRef.current) {
+              const Ctx = window.AudioContext || window.webkitAudioContext;
+              if (Ctx) audioCtxRef.current = new Ctx();
+            }
+            const ctx = audioCtxRef.current;
+            if (ctx && ctx.state === 'suspended') {
+              ctx.resume().catch(() => {});
+            }
+            if (ctx) {
+              const o = ctx.createOscillator();
+              const g = ctx.createGain();
+              o.type = 'triangle';
+              o.frequency.value = 220; // low tick
+              g.gain.value = 0.12;
+              o.connect(g);
+              g.connect(ctx.destination);
+              o.start();
+              const now = ctx.currentTime;
+              g.gain.setValueAtTime(0.12, now);
+              g.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+              o.stop(now + 0.18);
+            }
+          } catch (_) {
+            // ignore audio errors silently
+          }
+        }
       } finally {
         setLoading(false);
       }
     },
-    [userId, canInput, board]
+    [userId, canInput, board, score]
   );
 
   // keyboard + drag controls remain same
@@ -243,9 +313,14 @@ export default function App() {
           </button>
         </div>
         <div className="status-bar">
-          <div className="score-box">
-            <span>Score</span>
-            <strong>{score}</strong>
+          <div className="score-wrap">
+            {scoreDeltaFlash > 0 && (
+              <span className="score-delta" aria-live="polite">+{scoreDeltaFlash}</span>
+            )}
+            <div className="score-box">
+              <span>Score</span>
+              <strong>{score}</strong>
+            </div>
           </div>
           <div className="size-selector">
             <label>Size</label>
