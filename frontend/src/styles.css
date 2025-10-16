@@ -1,5 +1,5 @@
 body {
-  background-image: url("https://www.shutterstock.com/shutterstock/photos/2036719460/display_1500/stock-vector-abstract-game-light-out-technology-and-with-neon-triangles-hitech-communication-concept-innovation-2036719460.jpg");
+  background-image: url("https://i.pinimg.com/736x/f6/3c/ff/f63cffabe479ff0790d6ab001c65d82a.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -24,7 +24,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 0px; /* keep desktop spacing as-is */
   box-sizing: border-box;
   position: relative;
@@ -114,7 +114,7 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 0;
+  margin: 0 0 12px 0; /* space below board so it doesn't overlap controls */
 }
 
 /* Controls */
@@ -126,6 +126,24 @@ body {
   margin-top: 8px;
   flex-wrap: wrap;
   width: 100%;
+  padding: 0 12px;          /* breathing room at edges */
+  min-height: 44px;         /* ensure full button height visible */
+  overflow: visible;        /* avoid clipping the button */
+  position: relative;       /* create stacking context if needed */
+}
+
+/* Keep Restart button stable; let hint take remaining space */
+.controls > .btn {
+  flex: 0 0 auto;          /* do not shrink or grow */
+  white-space: nowrap;     /* keep icon+text on one line */
+}
+
+.controls .hint {
+  flex: 1 1 320px;         /* take remaining width; preferred min width */
+  min-width: 0;            /* allow text to shrink/truncate */
+  text-align: left;        /* sits beside button nicely */
+  overflow: hidden;        /* avoid layout shifts on long text */
+  text-overflow: ellipsis; /* show ellipsis when too long */
 }
 
 .btn {
@@ -342,6 +360,9 @@ body {
     gap: 8px;
   }
   .controls { gap: 10px; }
+  .controls .hint {
+    flex: 1 1 200px;  /* slightly smaller preferred width on mobile */
+  }
 }
 
 @media (max-width: 480px) {
@@ -351,9 +372,10 @@ body {
     padding-bottom: 4px;
   }
   .controls {
-    overflow-x: auto;
+    overflow-x: auto;              /* allow horizontal scroll instead of clipping */
     -webkit-overflow-scrolling: touch;
     flex-wrap: nowrap;
     justify-content: flex-start;
+    padding: 0 14px;               /* a bit more padding on very small screens */
   }
 }
