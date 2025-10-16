@@ -24,7 +24,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 0px;
   padding: 0px; /* keep desktop spacing as-is */
   box-sizing: border-box;
   position: relative;
@@ -334,6 +334,12 @@ body {
     justify-content: flex-start;
     padding: 8px;
   }
+  .status-bar {
+    justify-content: space-between !important;
+    gap: 16px !important;
+    width: 100%;
+  }
+  .game-header { gap: 8px; }
 }
 
 /* Narrow tablet breakpoint to collapse large gaps sooner (affects ~800px widths) */
@@ -372,10 +378,16 @@ body {
     padding-bottom: 4px;
   }
   .controls {
-    overflow-x: auto;              /* allow horizontal scroll instead of clipping */
+    overflow-x: visible;           /* avoid clipping */
     -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    padding: 0 14px;               /* a bit more padding on very small screens */
+    flex-wrap: wrap;               /* allow wrapping so button stays in view */
+    justify-content: center;       /* center button */
+    padding: 0 12px;               /* compact padding */
+  }
+  .controls > .btn { max-width: 90vw; }
+  .controls .hint {
+    flex: 1 1 100%;                /* move hint to next line full-width */
+    text-align: center;
+    margin-top: 6px;
   }
 }
