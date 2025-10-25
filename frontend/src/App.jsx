@@ -134,7 +134,7 @@ export default function App() {
               const o = ctx.createOscillator();
               const g = ctx.createGain();
               o.type = 'triangle';
-              o.frequency.value = 220; // low tick
+              o.frequency.value = 220;
               g.gain.value = 0.12;
               o.connect(g);
               g.connect(ctx.destination);
@@ -221,7 +221,7 @@ export default function App() {
       const dy = (p.clientY || 0) - startY;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
-      const threshold = 24; // minimal swipe distance in px
+      const threshold = 24; 
       let dir = null;
       if (absX > absY && absX > threshold) dir = dx > 0 ? 'right' : 'left';
       else if (absY > threshold) dir = dy > 0 ? 'down' : 'up';
@@ -277,7 +277,6 @@ export default function App() {
     clearTransient();
   };
 
-  // Dynamically size the board to avoid overlap while fitting viewport
   useEffect(() => {
     const updateBoardSize = () => {
       const vh = window.innerHeight || 0;
@@ -288,7 +287,7 @@ export default function App() {
       const headerH = header ? header.offsetHeight : 0;
       const controlsH = controls ? controls.offsetHeight : 0;
       const bannersH = banners.reduce((sum, el) => sum + el.offsetHeight, 0);
-      const verticalPadding = 24; // container padding + small spacing
+      const verticalPadding = 24; 
       const availableH = Math.max(120, vh - (headerH + controlsH + bannersH + verticalPadding));
       const maxByViewport = Math.min(vw, vh) * 0.9;
       const sizePx = Math.floor(Math.min(600, maxByViewport, availableH));
@@ -336,6 +335,11 @@ export default function App() {
       </header>
 
       <div className="board-wrapper">
+        {(!board || board.length === 0) && (
+          <div className="loader-overlay" aria-live="polite" aria-busy="true">
+            <div className="spinner" />
+          </div>
+        )}
         <Board
           board={board}
           onHover={(i, j) => setHoverPos(i == null ? null : { i, j })}
